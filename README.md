@@ -317,6 +317,7 @@ extension StripeSignatureError: AbortError {
 * [x] Tax Codes
 * [x] Tax Rates
 * [x] Shipping Rates
+* [x] Entitlements
 ---
 ### Checkout
 * [x] Sessions
@@ -339,6 +340,8 @@ extension StripeSignatureError: AbortError {
 * [x] Subscription Schedule
 * [x] Test Clocks
 * [x] Usage Records
+* [x] Meters
+* [x] Meter Events
 ---
 ### Connect
 * [x] Account
