@@ -99,7 +99,7 @@ public struct Session: Codable {
     /// Shipping information for this Checkout Session.
     public var shippingDetails: ShippingLabel?
     /// The shipping rate options applied to this Session.
-    public var shipppingOptions: [SessionShippingOption]?
+    public var shippingOptions: [SessionShippingOption]?
     /// Describes the type of transaction being performed by Checkout in order to customize relevant text on the page, such as the submit button. `submit_type` can only be specified on Checkout Sessions in `payment` mode, but not Checkout Sessions in `subscription` or `setup` mode.
     public var submitType: SessionSubmitType?
     /// The ID of the subscription created if one or more plans were provided.
@@ -154,7 +154,7 @@ public struct Session: Codable {
                 shippingRate: String? = nil,
                 shippingCost: SessionShippingCost? = nil,
                 shippingDetails: ShippingLabel? = nil,
-                shipppingOptions: [SessionShippingOption]? = nil,
+                shippingOptions: [SessionShippingOption]? = nil,
                 submitType: SessionSubmitType? = nil,
                 subscription: String? = nil,
                 taxIdCollection: SessionTaxIdCollection? = nil,
@@ -204,7 +204,7 @@ public struct Session: Codable {
         self._shippingRate = Expandable(id: shippingRate)
         self.shippingCost = shippingCost
         self.shippingDetails = shippingDetails
-        self.shipppingOptions = shipppingOptions
+        self.shippingOptions = shippingOptions
         self.submitType = submitType
         self._subscription = Expandable(id: subscription)
         self.taxIdCollection = taxIdCollection
