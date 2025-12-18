@@ -8,6 +8,7 @@
 import AsyncHTTPClient
 import NIO
 
+
 public final class StripeClient {
     // MARK: - CORE RESOURCES
 
@@ -146,8 +147,8 @@ public final class StripeClient {
     /// Returns a StripeClient used to interact with the Stripe APIs.
     /// - Parameter httpClient: An `HTTPClient`used to communicate wiith the Stripe API
     /// - Parameter apiKey: A Stripe API key.
-    public init(httpClient: HTTPClient, apiKey: String) {
-        handler = StripeAPIHandler(httpClient: httpClient, apiKey: apiKey)
+    public init(stripehttpClient: StripeHTTPClient, apiKey: String) {
+        handler = StripeAPIHandler(stripehttpClient: stripehttpClient, apiKey: apiKey)
 
         balances = StripeBalanceRoutes(apiHandler: handler)
         balanceTransactions = StripeBalanceTransactionRoutes(apiHandler: handler)
