@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [Connection Token Object](https://stripe.com/docs/api/terminal/connection_tokens/object)
-public struct TerminalConnectionToken: Codable {
+public struct TerminalConnectionToken: Sendable, Codable {
     /// String representing the object’s type. Objects of the same type share the same value.
     public var object: String
     /// The id of the location that this connection token is scoped to.

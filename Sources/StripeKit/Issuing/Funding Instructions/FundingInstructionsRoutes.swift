@@ -9,7 +9,7 @@ import NIO
 import NIOHTTP1
 import Foundation
 
-public protocol FundingInstructionsRoutes: StripeAPIRoute {
+public protocol FundingInstructionsRoutes: Sendable, StripeAPIRoute {
     /// Create or retrieve funding instructions for an Issuing balance. If funding instructions don’t yet exist for the account, we’ll create new funding instructions. If we’ve already created funding instructions for the account, the same we’ll retrieve the same funding instructions. In other words, we’ll return the same funding instructions each time.
     /// - Parameters:
     ///   - bankTransfer: Additional parameters for `bank_transfer` funding types

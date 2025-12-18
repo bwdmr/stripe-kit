@@ -5,7 +5,7 @@
 //  Created by Andrew Edwards on 4/15/19.
 //
 
-public struct BillingDetails: Codable {
+public struct BillingDetails: Sendable, Codable {
     /// Billing address.
     public var address: Address?
     /// Email address.

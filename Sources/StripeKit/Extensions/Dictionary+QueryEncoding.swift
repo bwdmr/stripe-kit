@@ -32,7 +32,7 @@ extension Dictionary where Key == String {
 }
 
 private extension CharacterSet {
-    static var queryComponentAllowed: CharacterSet = {
+    nonisolated(unsafe) static var queryComponentAllowed: CharacterSet = {
         var characterSet = CharacterSet.urlQueryAllowed
         characterSet.remove("&")
         characterSet.remove("+")

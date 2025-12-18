@@ -7,9 +7,7 @@
 
 import Foundation
 
-public struct SetupAttempt: Codable {
-    
-    
+public struct SetupAttempt: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String
     /// String representing the object’s type. Objects of the same type share the same value.
@@ -35,7 +33,7 @@ public struct SetupAttempt: Codable {
     /// Details about the payment method at the time of SetupIntent confirmation.
     public var paymentMethodDetails: SetupAttemptPaymentMethodDetails?
     /// The error encountered during this attempt to confirm the SetupIntent, if any.
-    public var setupError: _StripeError?
+    public var setupError: StripeError?
     /// ID of the SetupIntent that this attempt belongs to.
     @Expandable<SetupIntent> public var setupIntent: String?
     /// Status of this SetupAttempt, one of `requires_confirmation`, `requires_action`, `processing`, `succeeded`, `failed`, or `abandoned`.
@@ -54,7 +52,7 @@ public struct SetupAttempt: Codable {
                 onBehalfOf: String? = nil,
                 paymentMethod: String? = nil,
                 paymentMethodDetails: SetupAttemptPaymentMethodDetails? = nil,
-                setupError: _StripeError? = nil,
+                setupError: StripeError? = nil,
                 setupIntent: String? = nil,
                 status: SetupAttemptStatus? = nil,
                 usage: SetupAttemptUsage? = nil) {
@@ -76,7 +74,7 @@ public struct SetupAttempt: Codable {
     }
 }
 
-public enum SetupAttemptStatus: String, Codable {
+public enum SetupAttemptStatus: String, Sendable, Codable {
     case requiresConfirmation = "requires_confirmation"
     case requiresAction = "requires_action"
     case processing
@@ -85,12 +83,12 @@ public enum SetupAttemptStatus: String, Codable {
     case abandoned
 }
 
-public enum SetupAttemptUsage: String, Codable {
+public enum SetupAttemptUsage: String, Sendable, Codable {
     case offSession = "off_session"
     case onSession = "on_session"
 }
 
-public struct SetupAttemptList: Codable {
+public struct SetupAttemptList: Sendable, Codable {
     public var object: String
     public var hasMore: Bool?
     public var url: String?

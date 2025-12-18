@@ -17,7 +17,7 @@ internal let FilesAPIBase = "https://files.stripe.com/"
 internal let APIVersion = "v1/"
 
 
-public protocol StripeHTTPClient {
+public protocol StripeHTTPClient: Sendable {
     func execute(
         _ request: HTTPClientRequest,
         timeout: TimeAmount
@@ -34,7 +34,7 @@ extension HTTPClientRequest.Body {
     }
 }
 
-struct StripeAPIHandler {
+struct StripeAPIHandler: Sendable {
     private let stripehttpClient: StripeHTTPClient
     private let apiKey: String
     private let decoder = JSONDecoder()
@@ -46,7 +46,7 @@ struct StripeAPIHandler {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
     
-    func send<T: Codable>(
+    func send<T: Sendable & Codable>(
       method: HTTPMethod,
       path: String,
       query: String = "",

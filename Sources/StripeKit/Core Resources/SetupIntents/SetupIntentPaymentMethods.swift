@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SetupIntentPaymentMethodOptions: Codable {
+public struct SetupIntentPaymentMethodOptions: Sendable, Codable {
     /// If the SetupIntent’s `payment_method_types` includes `acss_debit`, this hash contains the configurations that will be applied to each setup attempt of that type.
     public var acssDebit: SetupIntentPaymentMethodOptionsAcssDebit?
     /// If the SetupIntent’s `payment_method_types` includes `blik`, this hash contains the configurations that will be applied to each setup attempt of that type.
@@ -37,7 +37,7 @@ public struct SetupIntentPaymentMethodOptions: Codable {
 }
 
 // MARK: ACSS Debit
-public struct SetupIntentPaymentMethodOptionsAcssDebit: Codable {
+public struct SetupIntentPaymentMethodOptionsAcssDebit: Sendable, Codable {
     /// Currency supported by the bank account
     public var currency: Currency?
     /// Additional fields for Mandate creation
@@ -54,7 +54,7 @@ public struct SetupIntentPaymentMethodOptionsAcssDebit: Codable {
     }
 }
 
-public struct SetupIntentPaymentMethodOptionsAcssDebitMandateOptions: Codable {
+public struct SetupIntentPaymentMethodOptionsAcssDebitMandateOptions: Sendable, Codable {
     /// A URL for custom mandate text
     public var customMandateUrl: String?
     /// List of Stripe products where this mandate can be selected automatically.
@@ -79,7 +79,7 @@ public struct SetupIntentPaymentMethodOptionsAcssDebitMandateOptions: Codable {
     }
 }
 
-public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsPayoutSchedule: String, Codable {
+public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsPayoutSchedule: String, Sendable, Codable {
     /// Payments are initiated at a regular pre-defined interval
     case interval
     /// Payments are initiated sporadically
@@ -88,14 +88,14 @@ public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsPayoutSchedule
     case combined
 }
 
-public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsTransactionType: String, Codable {
+public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsTransactionType: String, Sendable, Codable {
     /// Transactions are made for personal reasons
     case personal
     /// Transactions are made for business reasons
     case business
 }
 
-public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsVerificationMethod: String, Codable {
+public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsVerificationMethod: String, Sendable, Codable {
     /// Instant verification with fallback to microdeposits.
     case automatic
     /// Instant verification.
@@ -105,7 +105,7 @@ public enum SetupIntentPaymentMethodOptionsAcssDebitMandateOptionsVerificationMe
 }
 
 // MARK: Blik
-public struct SetupIntentPaymentMethodOptionsBlik: Codable {
+public struct SetupIntentPaymentMethodOptionsBlik: Sendable, Codable {
     /// Details of the reusable mandate.
     public var mandateOptions: SetupIntentPaymentMethodOptionsBlikMandateOptions?
     
@@ -114,7 +114,7 @@ public struct SetupIntentPaymentMethodOptionsBlik: Codable {
     }
 }
 
-public struct SetupIntentPaymentMethodOptionsBlikMandateOptions: Codable {
+public struct SetupIntentPaymentMethodOptionsBlikMandateOptions: Sendable, Codable {
     public var expiresAfter: Date?
     /// Details for off-session mandates.
     public var offSession: SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession?
@@ -130,7 +130,7 @@ public struct SetupIntentPaymentMethodOptionsBlikMandateOptions: Codable {
     }
 }
 
-public struct SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession: Codable {
+public struct SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession: Sendable, Codable {
     /// Amount of each recurring payment.
     public var amount: Int?
     /// Currency of each recurring payment.
@@ -147,7 +147,7 @@ public struct SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession: Codab
     }
 }
 
-public enum SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSessionInterval: String, Codable {
+public enum SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSessionInterval: String, Sendable, Codable {
     /// Payments recur every day.
     case day
     /// Payments recur every week.
@@ -158,7 +158,7 @@ public enum SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSessionInterval:
     case year
 }
 
-public enum SetupIntentPaymentMethodOptionsBlikMandateOptionsType: String, Codable {
+public enum SetupIntentPaymentMethodOptionsBlikMandateOptionsType: String, Sendable, Codable {
     /// Mandate for on-session payments.
     case onSession = "on_session"
     /// Mandate for off-session payments.
@@ -166,7 +166,7 @@ public enum SetupIntentPaymentMethodOptionsBlikMandateOptionsType: String, Codab
 }
 
 // MARK: Card
-public struct SetupIntentPaymentMethodOptionsCard: Codable {
+public struct SetupIntentPaymentMethodOptionsCard: Sendable, Codable {
     /// Configuration options for setting up an eMandate for cards issued in India.
     public var mandateOptions: SetupIntentPaymentMethodOptionsCardMandateOptions?
     /// Selected network to process this SetupIntent on. Depends on the available networks of the card attached to the setup intent. Can be only set confirm-time.
@@ -183,7 +183,7 @@ public struct SetupIntentPaymentMethodOptionsCard: Codable {
     }
 }
 
-public struct SetupIntentPaymentMethodOptionsCardMandateOptions: Codable {
+public struct SetupIntentPaymentMethodOptionsCardMandateOptions: Sendable, Codable {
     /// Amount to be charged for future payments.
     public var amount: Int?
     /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount` param.
@@ -228,12 +228,12 @@ public struct SetupIntentPaymentMethodOptionsCardMandateOptions: Codable {
     }
 }
 
-public enum SetupIntentPaymentMethodOptionsCardMandateOptionsAmountType: String, Codable {
+public enum SetupIntentPaymentMethodOptionsCardMandateOptionsAmountType: String, Sendable, Codable {
     case fixed
     case maximum
 }
 
-public enum SetupIntentPaymentMethodOptionsCardMandateOptionsInterval: String, Codable {
+public enum SetupIntentPaymentMethodOptionsCardMandateOptionsInterval: String, Sendable, Codable {
     case day
     case week
     case month
@@ -242,7 +242,7 @@ public enum SetupIntentPaymentMethodOptionsCardMandateOptionsInterval: String, C
 }
 
 // MARK: Link
-public struct SetupIntentPaymentMethodOptionsLink: Codable {
+public struct SetupIntentPaymentMethodOptionsLink: Sendable, Codable {
     /// Token used for persistent Link logins.
     public var persistentToken: String?
     
@@ -252,7 +252,7 @@ public struct SetupIntentPaymentMethodOptionsLink: Codable {
 }
 
 // MARK: SEPA Debit
-public struct SetupIntentPaymentMethodOptionsSepaDebit: Codable {
+public struct SetupIntentPaymentMethodOptionsSepaDebit: Sendable, Codable {
     /// Additional fields for Mandate creation
     public var mandateOptions: SetupIntentPaymentMethodOptionsSepaDebitMandateOptions?
     
@@ -261,12 +261,12 @@ public struct SetupIntentPaymentMethodOptionsSepaDebit: Codable {
     }
 }
 
-public struct SetupIntentPaymentMethodOptionsSepaDebitMandateOptions: Codable {
+public struct SetupIntentPaymentMethodOptionsSepaDebitMandateOptions: Sendable, Codable {
     public init() { }
 }
 
 // MARK: US Bank Account
-public struct SetupIntentPaymentMethodOptionsUSBankAccount: Codable {
+public struct SetupIntentPaymentMethodOptionsUSBankAccount: Sendable, Codable {
     /// Additional fields for Financial Connections Session creation
     public var financialConnections: SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnections?
     /// Bank account verification method.
@@ -279,7 +279,7 @@ public struct SetupIntentPaymentMethodOptionsUSBankAccount: Codable {
     }
 }
 
-public struct SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnections: Codable {
+public struct SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnections: Sendable, Codable {
     /// The list of permissions to request. The `payment_method` permission must be included.
     public var permissions: [SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnectionsPermission]?
     
@@ -288,7 +288,7 @@ public struct SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnections: 
     }
 }
 
-public enum SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnectionsPermission: String, Codable {
+public enum SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnectionsPermission: String, Sendable, Codable {
     /// Allows the creation of a payment method from the account.
     case paymentMethod = "payment_method"
     /// Allows accessing balance data from the account.
@@ -299,7 +299,7 @@ public enum SetupIntentPaymentMethodOptionsUSBankAccountFinancialConnectionsPerm
     case ownership
 }
 
-public enum SetupIntentPaymentMethodOptionsUSBankAccountVerificationMethod: String, Codable {
+public enum SetupIntentPaymentMethodOptionsUSBankAccountVerificationMethod: String, Sendable, Codable {
     /// Instant verification with fallback to microdeposits.
     case automatic
     /// Instant verification only.

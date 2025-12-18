@@ -22,9 +22,9 @@ extension KeyedDecodingContainer {
 }
 
 @propertyWrapper
-public struct Expandable<Model: Codable>: Codable {
+public struct Expandable<Model: Sendable & Codable>: Sendable, Codable {
     
-    private enum ExpandableState {
+    private enum ExpandableState: Sendable {
         case unexpanded(String)
         indirect case expanded(Model)
         case empty
@@ -93,10 +93,10 @@ public struct Expandable<Model: Codable>: Codable {
 }
 
 @propertyWrapper
-public struct DynamicExpandable<A: Codable, B: Codable>: Codable {
-    private enum ExpandableState {
+public struct DynamicExpandable<A: Sendable & Codable, B: Sendable & Codable>: Sendable, Codable {
+    private enum ExpandableState: Sendable {
         case unexpanded(String)
-        indirect case expanded(Codable)
+        indirect case expanded(Sendable & Codable)
         case empty
     }
 
@@ -189,7 +189,7 @@ public struct DynamicExpandable<A: Codable, B: Codable>: Codable {
 }
 
 @propertyWrapper
-public struct ExpandableCollection<Model: Codable>: Codable {
+public struct ExpandableCollection<Model: Sendable & Codable>: Sendable, Codable {
     private enum ExpandableState {
         case unexpanded([String])
         indirect case expanded([Model])

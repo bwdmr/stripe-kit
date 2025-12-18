@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TerminalHardwareProduct: Codable {
+public struct TerminalHardwareProduct: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String
     /// String representing the object’s type. Objects of the same type share the same value.
@@ -32,14 +32,14 @@ public struct TerminalHardwareProduct: Codable {
     }
 }
 
-public enum TerminalHardwareProductStatus: String, Codable {
+public enum TerminalHardwareProductStatus: String, Sendable, Codable {
     /// Available for new orders.
     case available
     /// Can no longer be used for order creation.
     case unavailable
 }
 
-public struct TerminalHardwareProductList: Codable {
+public struct TerminalHardwareProductList: Sendable, Codable {
     public var object: String
     public var hasMore: Bool?
     public var url: String?

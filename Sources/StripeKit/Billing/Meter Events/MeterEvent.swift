@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [Meter Even Object](https://docs.stripe.com/api/billing/meter-event/object).
-public struct MeterEvent: Codable {
+public struct MeterEvent: Sendable, Codable {
     /// String representing the object’s type. Objects of the same type share the same value.
     public var object: String
     /// Time at which the object was created. Measured in seconds since the Unix epoch.

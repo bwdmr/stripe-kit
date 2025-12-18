@@ -20,7 +20,7 @@ private func XCTAssertThrowsErrorAsync(
 class RouteListTest: XCTestCase {
   enum RouteListTestError: Error { case fail }
   
-  final class HTTPClientSpy: StripeHTTPClient {
+  actor HTTPClientSpy: StripeHTTPClient {
       enum SpyError: Error { case stopAfterCapture }
 
       private(set) var lastRequest: HTTPClientRequest?
@@ -99,7 +99,7 @@ class RouteListTest: XCTestCase {
     let sut = StripeCreditNoteRoutes(apiHandler: Self.apihandlerSpy)
     await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: creditnoteID) }
     
-    guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+    guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
     XCTAssertEqual(lastRequest.method, .GET)
     XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/credit_notes/\(creditnoteID)")
   }
@@ -111,7 +111,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCustomerBalanceTransactionRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(customer: customerID, transaction: transactionID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
 
       XCTAssertEqual(URL(string: lastRequest.url)?.path, "/v1/customers/\(customerID)/balance_transactions/\(transactionID)")
@@ -123,7 +123,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePortalConfigurationRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(configuration: configurationID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
 
       XCTAssertEqual(URL(string: lastRequest.url)?.path, "/v1/billing_portal/configurations/\(configurationID)")
@@ -136,7 +136,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCustomerTaxIDRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: taxID, customer: customerID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/customers/\(customerID)/tax_ids/\(taxID)")
   }
@@ -147,7 +147,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeInvoiceItemRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(invoiceItem: invoiceItemID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/invoiceitems/\(invoiceItemID)")
   }
@@ -158,7 +158,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeInvoiceRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(invoice: invoiceID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/invoices/\(invoiceID)")
   }
@@ -171,7 +171,7 @@ class RouteListTest: XCTestCase {
           identifier: "evt_123",
           timestamp: Date()) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/billing/meter_events")
   }
@@ -182,7 +182,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePlanRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(plan: planID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/plans/\(planID)")
   }
@@ -193,7 +193,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeQuoteLineItemRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(quote: quoteID, filter: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/quotes/\(quoteID)/line_items")
   }
@@ -204,7 +204,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeQuoteRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(quote: quoteID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/quotes/\(quoteID)")
   }
@@ -215,7 +215,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeSubscriptionItemRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(item: subscriptionItemID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/subscription_items/\(subscriptionItemID)")
   }
@@ -226,7 +226,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeSubscriptionScheduleRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(schedule: scheduleID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/subscription_schedules/\(scheduleID)")
   }
@@ -237,7 +237,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeSubscriptionRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: subscriptionID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/subscriptions/\(subscriptionID)")
   }
@@ -248,7 +248,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTestClockRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(testClock: testClockID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/test_helpers/test_clocks/\(testClockID)")
   }
@@ -264,7 +264,7 @@ class RouteListTest: XCTestCase {
           action: nil)
       }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/subscription_items/\(subscriptionItemID)/usage_records")
   }
@@ -281,7 +281,7 @@ class RouteListTest: XCTestCase {
           collect: nil)
       }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/account_links")
   }
@@ -292,7 +292,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeAccountSessionsRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.create(account: accountID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/account_sessions")
   }
@@ -303,7 +303,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeConnectAccountRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(account: accountID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/accounts/\(accountID)")
   }
@@ -315,7 +315,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeApplicationFeeRefundRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(refund: refundID, fee: feeID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/application_fees/\(feeID)/refunds/\(refundID)")
   }
@@ -326,7 +326,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeApplicationFeeRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(fee: feeID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/application_fees/\(feeID)")
   }
@@ -337,7 +337,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCapabilitiesRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(capability: accountID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/accounts/\(accountID)/capabilities/card_payments")
   }
@@ -348,7 +348,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCountrySpecRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(country: countryCode) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/country_specs/\(countryCode)")
   }
@@ -360,7 +360,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeExternalAccountsRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieveBankAccount(account: accountID, id: bankAccountID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/accounts/\(accountID)/external_accounts/\(bankAccountID)")
   }
@@ -372,7 +372,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeExternalAccountsRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieveCard(account: accountID, id: cardID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/accounts/\(accountID)/external_accounts/\(cardID)")
   }
@@ -384,7 +384,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePersonRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(account: accountID, person: personID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/accounts/\(accountID)/persons/\(personID)")
   }
@@ -396,7 +396,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeSecretRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.find(name: secretName, scope: scope, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/secrets/find")
   }
@@ -407,7 +407,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTopUpRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(topup: topupID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/topups/\(topupID)")
   }
@@ -419,7 +419,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTransferReversalRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: reversalID, transfer: transferID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/transfers/\(reversalID)/reversals/\(reversalID)")
   }
@@ -430,7 +430,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTransferRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(transfer: transferID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/transfers/\(transferID)")
   }
@@ -439,7 +439,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeBalanceRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve() }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/balance")
   }
@@ -450,7 +450,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeBalanceTransactionRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: transactionID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/balance_transactions/\(transactionID)")
   }
@@ -461,7 +461,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeChargeRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(charge: chargeID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/charges/\(chargeID)")
   }
@@ -472,7 +472,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCustomerRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(customer: customerID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/customers/\(customerID)")
   }
@@ -483,7 +483,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeDisputeRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(dispute: disputeID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/disputes/\(disputeID)")
   }
@@ -499,7 +499,7 @@ class RouteListTest: XCTestCase {
           expand: nil)
       }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/ephemeral_keys")
   }
@@ -510,7 +510,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeEventRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: eventID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/events/\(eventID)")
   }
@@ -521,7 +521,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeFileLinkRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(link: fileLinkID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/file_links/\(fileLinkID)")
   }
@@ -532,7 +532,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeFileRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(file: fileID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/files/\(fileID)")
   }
@@ -543,7 +543,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeMandateRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(mandate: mandateID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/mandates/\(mandateID)")
   }
@@ -554,7 +554,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePaymentIntentRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(intent: paymentIntentID, clientSecret: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/payment_intents/\(paymentIntentID)")
   }
@@ -565,7 +565,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePayoutRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(payout: payoutID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/payouts/\(payoutID)")
   }
@@ -576,7 +576,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeRefundRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(refund: refundID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/refunds/\(refundID)")
   }
@@ -587,7 +587,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeSetupAttemptRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.listAll(setupIntent: setupIntentID, filter: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/setup_attempts/\(setupIntentID)")
   }
@@ -598,7 +598,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeSetupIntentsRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(intent: setupIntentID, clientSecret: nil, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/setup_intents/\(setupIntentID)")
   }
@@ -609,7 +609,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTokenRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(token: tokenID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/tokens/\(tokenID)")
   }
@@ -620,7 +620,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeActiveEntitlementRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: entitlementID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/entitlements/active_entitlements/\(entitlementID)")
   }
@@ -633,7 +633,7 @@ class RouteListTest: XCTestCase {
           metadata: nil)
       }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/entitlements/features")
   }
@@ -644,7 +644,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeEarlyFraudWarningRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(earlyFraudWarning: earlyFraudWarningID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/radar/early_fraud_warnings/\(earlyFraudWarningID)")
   }
@@ -655,7 +655,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeReviewRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(review: reviewID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/reviews\(reviewID)")
   }
@@ -666,7 +666,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeValueListItemRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(item: itemID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/radar/value_list_items/\(itemID)")
   }
@@ -677,7 +677,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeValueListRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(valueList: valueListID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/radar/value_lists/\(valueListID)")
   }
@@ -688,7 +688,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeVerificationReportRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(verificationReportId: verificationReportID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/identity/verification_reports/\(verificationReportID)")
   }
@@ -699,7 +699,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeVerificationSessionRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(verificationSessionId: verificationSessionID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/identity/verification_sessions/\(verificationSessionID)")
   }
@@ -710,7 +710,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeAuthorizationRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(authorization: authorizationID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/issuing/authorizations/\(authorizationID)")
   }
@@ -721,7 +721,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeIssuingCardRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(card: cardID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/issuing/cards/\(cardID)")
   }
@@ -732,7 +732,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCardholderRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(cardholder: cardholderID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/issuing/cardholders/\(cardholderID)")
   }
@@ -743,7 +743,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeIssuingDisputeRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(dispute: disputeID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/issuing/disputes/\(disputeID)")
   }
@@ -760,7 +760,7 @@ class RouteListTest: XCTestCase {
           fundingType: fundingType)
       }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/issuing/funding_instructions")
   }
@@ -771,7 +771,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePaymentLinkRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: paymentLinkID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/payment_links/\(paymentLinkID)")
   }
@@ -783,7 +783,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeBankAccountRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: bankAccountID, customer: customerID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/customers/\(customerID)/sources/\(bankAccountID)")
   }
@@ -795,7 +795,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCardRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: cardID, customer: customerID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/customers/\(customerID)/sources/\(cardID)")
   }
@@ -806,7 +806,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCashBalanceRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(customer: customerID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/customers/\(customerID)/cash_balance")
   }
@@ -817,7 +817,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePaymentMethodRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(paymentMethod: paymentMethodID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/payment_methods/\(paymentMethodID)")
   }
@@ -828,7 +828,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeCouponRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(coupon: couponID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/coupons/\(couponID)")
   }
@@ -839,7 +839,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeDiscountRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.delete(customer: customerID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .DELETE)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/customers/\(customerID)/discount")
   }
@@ -850,7 +850,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePriceRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(price: priceID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/prices/\(priceID)")
   }
@@ -861,7 +861,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeProductRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: productID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/products/\(productID)")
   }
@@ -872,7 +872,7 @@ class RouteListTest: XCTestCase {
       let sut = StripePromotionCodesRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(promotionCode: promotionCodeID) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/promotion_codes/\(promotionCodeID)")
   }
@@ -883,7 +883,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeShippingRateRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: shippingRateID, expand: nil) }
 
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/shipping_rates/\(shippingRateID)")
   }
@@ -893,7 +893,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTaxCodeRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(id: taxCodeID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/tax_codes/\(taxCodeID)")
   }
@@ -903,7 +903,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTaxRateRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(taxRate: taxRateID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/tax_rates/\(taxRateID)")
   }
@@ -913,7 +913,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeReportRunRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(reportRun: reportRunID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/reporting/report_runs/\(reportRunID)")
   }
@@ -923,7 +923,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeReportTypeRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(reportType: reportTypeID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/reporting/report_types/\(reportTypeID)")
   }
@@ -933,7 +933,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeScheduledQueryRunRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(scheduledQueryRun: scheduledQueryRunID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/scheduled_query_runs/\(scheduledQueryRunID)")
   }
@@ -943,7 +943,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalConfigurationRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(config: configID, expand: nil) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/configurations/\(configID)")
   }
@@ -952,7 +952,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalConnectionTokenRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.create(location: nil) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .POST)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/connection_tokens")
   }
@@ -962,7 +962,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalHardwareOrderRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(order: orderID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/hardware_orders/\(orderID)")
   }
@@ -972,7 +972,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalHardwareProductRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(product: productID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/hardware_products/\(productID)")
   }
@@ -982,7 +982,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalHardwareShippingMethodRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(shippingMethod: shippingMethodID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/hardware_shipping_methods/\(shippingMethodID)")
   }
@@ -992,7 +992,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalHardwareSKURoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(sku: skuID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/hardware_skus/\(skuID)")
   }
@@ -1002,7 +1002,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalLocationRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(location: locationID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/locations/\(locationID)")
   }
@@ -1012,7 +1012,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeTerminalReaderRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(reader: readerID, expand: nil) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/terminal/readers/\(readerID)")
   }
@@ -1022,7 +1022,7 @@ class RouteListTest: XCTestCase {
       let sut = StripeWebhookEndpointRoutes(apiHandler: Self.apihandlerSpy)
       await XCTAssertThrowsErrorAsync { _ = try await sut.retrieve(webhookEndpoint: webhookEndpointID) }
       
-      guard let lastRequest = Self.spy.lastRequest else { throw RouteListTestError.fail }
+      guard let lastRequest = await Self.spy.lastRequest else { throw RouteListTestError.fail }
       XCTAssertEqual(lastRequest.method, .GET)
       XCTAssertEqual(URL(string: lastRequest.url)?.path(), "/v1/webhook_endpoints/\(webhookEndpointID)")
   }

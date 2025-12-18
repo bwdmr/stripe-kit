@@ -7,7 +7,7 @@
 //
 
 /// The [Bak Account Object](https://stripe.com/docs/api/customer_bank_accounts/object) .
-public struct BankAccount: Codable {
+public struct BankAccount: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String
     /// The name of the person or business that owns the bank account.
@@ -82,7 +82,7 @@ public struct BankAccount: Codable {
     }
 }
 
-public enum BankAccountStatus: String, Codable {
+public enum BankAccountStatus: String, Sendable, Codable {
     case new
     case validated
     case verified
@@ -90,12 +90,12 @@ public enum BankAccountStatus: String, Codable {
     case errored
 }
 
-public enum BankAccountHolderType: String, Codable {
+public enum BankAccountHolderType: String, Sendable, Codable {
     case individual
     case company
 }
 
-public struct BankAccountList: Codable {
+public struct BankAccountList: Sendable, Codable {
     /// String representing the object’s type. Objects of the same type share the same value. Always has the value list.
     public var object: String
     /// An array of `StripeCard`s associated with the account.

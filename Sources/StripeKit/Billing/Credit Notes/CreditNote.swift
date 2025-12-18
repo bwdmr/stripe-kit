@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [Credit Note Object](https://stripe.com/docs/api/credit_notes/object) .
-public struct CreditNote: Codable {
+public struct CreditNote: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String?
     /// Three-letter ISO currency code, in lowercase. Must be a supported currency.
@@ -121,19 +121,19 @@ public struct CreditNote: Codable {
     }
 }
 
-public enum CreditNoteReason: String, Codable {
+public enum CreditNoteReason: String, Sendable, Codable {
     case duplicate
     case fraudulent
     case orderChange = "order_change"
     case productUnsatisfactory = "product_unsatisfactory"
 }
 
-public enum CreditNoteStatus: String, Codable {
+public enum CreditNoteStatus: String, Sendable, Codable {
     case issued
     case void
 }
 
-public struct CreditNoteShippingCost: Codable {
+public struct CreditNoteShippingCost: Sendable, Codable {
     /// Total shipping cost before any taxes are applied.
     public var amountSubtotal: Int?
     /// Total tax amount applied due to shipping costs. If no tax was applied, defaults to 0.
@@ -158,7 +158,7 @@ public struct CreditNoteShippingCost: Codable {
     }
 }
 
-public struct CreditNoteShippingCostTax: Codable {
+public struct CreditNoteShippingCostTax: Sendable, Codable {
     /// Amount of tax applied for this rate.
     public var amount: Int?
     /// The tax rate applied.
@@ -170,7 +170,7 @@ public struct CreditNoteShippingCostTax: Codable {
     }
 }
 
-public struct CreditNoteTaxAmount: Codable {
+public struct CreditNoteTaxAmount: Sendable, Codable {
     /// The amount, in cents, of the tax.
     public var amount: Int?
     /// Whether this tax amount is inclusive or exclusive.
@@ -187,12 +187,12 @@ public struct CreditNoteTaxAmount: Codable {
     }
 }
 
-public enum CreditNoteType: String, Codable {
+public enum CreditNoteType: String, Sendable, Codable {
     case postPayment = "post_payment"
     case prePayment = "pre_payment"
 }
 
-public struct CreditNoteList: Codable {
+public struct CreditNoteList: Sendable, Codable {
     public var object: String
     public var data: [CreditNote]?
     public var hasMore: Bool?

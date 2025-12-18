@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [Reader Object](https://stripe.com/docs/api/terminal/readers/object)
-public struct TerminalReader: Codable {
+public struct TerminalReader: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String
     /// Type of reader, one of `bbpos_wisepad3`, `stripe_m2`, `bbpos_chipper2x`, `bbpos_wisepos_e`, `verifone_P400`, or `simulated_wisepos_e`.
@@ -65,7 +65,7 @@ public struct TerminalReader: Codable {
     }
 }
 
-public struct TerminalReaderAction: Codable {
+public struct TerminalReaderAction: Sendable, Codable {
     /// Failure code, only set if status is failed.
     public var failureCode: String?
     /// Detailed failure message, only set if status is failed.
@@ -102,20 +102,20 @@ public struct TerminalReaderAction: Codable {
     }
 }
 
-public enum TerminalReaderActionStatus: String, Codable {
+public enum TerminalReaderActionStatus: String, Sendable, Codable {
     case inProgress = "in_progress"
     case succeeded
     case failed
 }
 
-public enum TerminalReaderActionType: String, Codable {
+public enum TerminalReaderActionType: String, Sendable, Codable {
     case processPaymentIntent = "process_payment_intent"
     case processSetupIntent = "process_setup_intent"
     case setReaderDisplay = "set_reader_display"
     case refundPayment = "refund_payment"
 }
 
-public struct TerminalReaderActionPaymentIntent: Codable {
+public struct TerminalReaderActionPaymentIntent: Sendable, Codable {
     /// Most recent PaymentIntent processed by the reader.
     @Expandable<PaymentIntent> public var paymentIntent: String?
     /// Per-transaction overrides of Terminal reader configurations.
@@ -128,7 +128,7 @@ public struct TerminalReaderActionPaymentIntent: Codable {
     }
 }
 
-public struct TerminalReaderActionPaymentIntentProcessConfig: Codable {
+public struct TerminalReaderActionPaymentIntentProcessConfig: Sendable, Codable {
     /// Override showing a tipping selection screen on this transaction.
     public var skipTipping: Bool?
     /// Tipping configuration for this transaction.
@@ -140,7 +140,7 @@ public struct TerminalReaderActionPaymentIntentProcessConfig: Codable {
     }
 }
 
-public struct TerminalReaderActionPaymentIntentProcessConfigTipping: Codable {
+public struct TerminalReaderActionPaymentIntentProcessConfigTipping: Sendable, Codable {
     /// Amount used to calculate tip suggestions on tipping selection screen for this transaction. Must be a positive integer in the smallest currency unit (e.g., 100 cents to represent $1.00 or 100 to represent ¥100, a zero-decimal currency).
     public var amount: Int?
     
@@ -149,7 +149,7 @@ public struct TerminalReaderActionPaymentIntentProcessConfigTipping: Codable {
     }
 }
 
-public struct TerminalReaderActionSetupIntent: Codable {
+public struct TerminalReaderActionSetupIntent: Sendable, Codable {
     /// ID of a card PaymentMethod generated from the `card_present` PaymentMethod that may be attached to a Customer for future transactions. Only present if it was possible to generate a card PaymentMethod.
     public var generatedCard: String?
     /// Most recent SetupIntent processed by the reader.
@@ -161,7 +161,7 @@ public struct TerminalReaderActionSetupIntent: Codable {
     }
 }
 
-public struct TerminalReaderActionRefundPayment: Codable {
+public struct TerminalReaderActionRefundPayment: Sendable, Codable {
     /// The amount being refunded.
     public var amount: Int?
     /// Charge that is being refunded.
@@ -198,7 +198,7 @@ public struct TerminalReaderActionRefundPayment: Codable {
     }
 }
 
-public struct TerminalReaderActionSetReaderDisplay: Codable {
+public struct TerminalReaderActionSetReaderDisplay: Sendable, Codable {
     /// Cart object to be displayed by the reader.
     public var cart: TerminalReaderActionSetReaderDisplayCart?
     /// Type of information to be displayed by the reader.
@@ -210,7 +210,7 @@ public struct TerminalReaderActionSetReaderDisplay: Codable {
     }
 }
 
-public struct TerminalReaderActionSetReaderDisplayCart: Codable {
+public struct TerminalReaderActionSetReaderDisplayCart: Sendable, Codable {
     /// Three-letter ISO currency code, in lowercase. Must be a supported currency.
     public var currency: Currency?
     /// List of line items in the cart.
@@ -231,7 +231,7 @@ public struct TerminalReaderActionSetReaderDisplayCart: Codable {
     }
 }
 
-public struct TerminalReaderActionSetReaderDisplayCartLineItem: Codable {
+public struct TerminalReaderActionSetReaderDisplayCartLineItem: Sendable, Codable {
     /// The amount of the line item. A positive integer in the smallest currency unit.
     public var amount: Int?
     /// Description of the line item.
@@ -248,7 +248,7 @@ public struct TerminalReaderActionSetReaderDisplayCartLineItem: Codable {
     }
 }
 
-public struct TerminalReaderList: Codable {
+public struct TerminalReaderList: Sendable, Codable {
     public var object: String
     public var data: [TerminalReader]?
     public var hasMore: Bool?

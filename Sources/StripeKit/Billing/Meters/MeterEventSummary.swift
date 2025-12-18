@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [Meter Event Summary Object](https://docs.stripe.com/api/billing/meter-event-summary)
-public struct MeterEventSummary: Codable {
+public struct MeterEventSummary: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String
     /// String representing the object’s type. Objects of the same type share the same value.
@@ -43,12 +43,12 @@ public struct MeterEventSummary: Codable {
     }
 }
 
-public enum MeterEventSummaryValueGroupingWindow: String, Codable {
+public enum MeterEventSummaryValueGroupingWindow: String, Sendable, Codable {
     case day
     case hour
 }
 
-public struct MeterEventSummaryList: Codable {
+public struct MeterEventSummaryList: Sendable, Codable {
     public var object: String
     public var hasMore: Bool?
     public var url: String?

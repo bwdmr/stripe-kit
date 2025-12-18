@@ -12,7 +12,7 @@
  https://stripe.com/docs/api#source_object
  */
 
-public enum StripePaymentSource: Codable {
+public enum StripePaymentSource: Sendable, Codable {
     case bankAccount(BankAccount)
     case card(Card)
     case source(Source)
@@ -47,7 +47,7 @@ public enum StripePaymentSource: Codable {
         }
     }
     
-    public enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, Sendable, CodingKey {
         case object
     }
 }

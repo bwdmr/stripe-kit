@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [Value List Item](https://stripe.com/docs/api/radar/value_list_items)
-public struct ValueListItem: Codable {
+public struct ValueListItem: Sendable, Codable {
     /// Unique identifier for the object.
     public var id: String
     /// The value of the item.
@@ -41,7 +41,7 @@ public struct ValueListItem: Codable {
     }
 }
 
-public struct ValueListItemList: Codable {
+public struct ValueListItemList: Sendable, Codable {
     public var object: String
     public var hasMore: Bool?
     public var url: String?
