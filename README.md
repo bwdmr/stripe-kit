@@ -281,6 +281,26 @@ extension StripeSignatureError: AbortError {
 }
 ``` 
 
+
+
+## Compatibility
+
+Verify compatibility with target linux-platforms: `stripe-kit:amd64 stripe-kit:arm64 stripe-kit:armv7`
+```
+# Test with default
+nerdctl compose build verify-amd64
+
+# Test with debug mode
+nerdctl compose build verify-amd64 --build-arg BUILD_TYPE=debug
+
+# Down, Clean, Prune
+nerdctl compose down
+nerdctl rmi stripe-kit:amd64 stripe-kit:arm64 stripe-kit:armv7 2>/dev/null && echo "  ✅ Removed $$img" || echo "
+nerdctl image prune -f
+```
+
+
+
 ## Whats Implemented
 
 ### Core Resources

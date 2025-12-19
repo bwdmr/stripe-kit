@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  verify-amd64:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+      args:
+        TARGETPLATFORM: linux/amd64
+    image: stripe-kit:amd64
+    container_name: stripe-kit-amd64-verify
+
+  verify-arm64:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/arm64
+      args:
+        TARGETPLATFORM: linux/arm64
+    image: stripe-kit:arm64
+    container_name: stripe-kit-arm64-verify
+
+  verify-armv7:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/arm/v7
+      args:
+        TARGETPLATFORM: linux/arm/v7
+    image: stripe-kit:armv7
+    container_name: stripe-kit-armv7-verify
